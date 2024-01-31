@@ -1,0 +1,14 @@
+{
+  "name": "submitservice",
+  "version": "1.0.0",
+  "description": "Submit service for Jokes API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Pilchh (alex@thepilchers.com)",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
