@@ -1,11 +1,37 @@
 services:
-  mysql:
-    image: mysql
-    volumes:
-      - jokes-mysql-database:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: jokes
-
-volumes:
-  jokes-mysql-database:
+  analytics:
+    container_name: analytics
+    image: analytics
+    restart: unless-stopped
+    build:
+      context: ./AnalyticsService
+      dockerfile: Dockerfile
+    ports:
+      - "${ANALYTICS_PORT}:${ANALYTICS_PORT}"
+  jokes:
+    container_name: jokes
+    image: jokes
+    restart: unless-stopped
+    build:
+      context: ./JokeService
+      dockerfile: Dockerfile
+    ports:
+      - "${JOKES_PORT}:${JOKES_PORT}"
+  mod:
+    container_name: mod
+    image: mod
+    restart: unless-stopped
+    build:
+      context: ./ModerateService
+      dockerfile: Dockerfile
+    ports:
+      - "${MOD_PORT}:${MOD_PORT}"
+  submit:
+    container_name: submit
+    image: submit
+    restart: unless-stopped
+    build:
+      context: ./SubmitService
+      dockerfile: Dockerfile
+    ports:
+      - "${SUBMIT_PORT}:${SUBMIT_PORT}"

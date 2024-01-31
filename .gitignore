@@ -1,6 +1,9 @@
 # IDE settings
 .idea
 
+# Environment Variables
+.env
+
 # node_modules
 AnalyticsService/node_modules
 JokeService/node_modules
