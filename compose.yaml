@@ -1,37 +1,19 @@
 services:
   analytics:
-    container_name: analytics
-    image: analytics
-    restart: unless-stopped
+    image: analytics:kong_test
     build:
       context: ./AnalyticsService
-      dockerfile: Dockerfile
+    pull_policy: always
+    container_name: analytics
     ports:
-      - "${ANALYTICS_PORT}:${ANALYTICS_PORT}"
+      - 4000:3000
   jokes:
-    container_name: jokes
-    image: jokes
-    restart: unless-stopped
+    image: jokes:kong_test
     build:
       context: ./JokeService
-      dockerfile: Dockerfile
+    pull_policy: always
+    container_name: jokes
     ports:
-      - "${JOKES_PORT}:${JOKES_PORT}"
-  mod:
-    container_name: mod
-    image: mod
-    restart: unless-stopped
-    build:
-      context: ./ModerateService
-      dockerfile: Dockerfile
-    ports:
-      - "${MOD_PORT}:${MOD_PORT}"
-  submit:
-    container_name: submit
-    image: submit
-    restart: unless-stopped
-    build:
-      context: ./SubmitService
-      dockerfile: Dockerfile
-    ports:
-      - "${SUBMIT_PORT}:${SUBMIT_PORT}"
+      - 4001:3001
+#    env_file:
+#      - .env
