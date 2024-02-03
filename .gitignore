@@ -5,7 +5,4 @@
 .env
 
 # node_modules
-AnalyticsService/node_modules
-JokeService/node_modules
-ModerateService/node_modules
-SubmitService/node_modules
+node_modules

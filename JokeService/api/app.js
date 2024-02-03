@@ -2,7 +2,7 @@ const express = require("express");
 
 const JokeRouter = require("./routes/jokes.routers");
 
-const PORT = 3001;
+const PORT = 3000;
 const app = express();
 
 app.use(express.static("public"));

@@ -6,6 +6,14 @@ services:
     pull_policy: always
     container_name: jokes-api
     ports:
+      - 4000:3000
+  etl:
+    image: etl-jokes
+    build:
+      context: ./etl
+    pull_policy: always
+    container_name: jokes-etl
+    ports:
       - 4001:3001
   db:
     image: mysql
@@ -13,13 +21,14 @@ services:
       - SYS_NICE
     restart: unless-stopped
     environment:
-      - MYSQL_DATABASE=jokes
+      - MYSQL_DATABASE=jokes_service
       - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_USER=pilchh
+      - MYSQL_PASS=password
+      - MYSQL_ROOT_HOST=%
     ports:
-      - '3306:3306'
+      - '4002:3306'
     volumes:
       - db:/var/lib/mysql
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 volumes:
   db:
-    driver: local

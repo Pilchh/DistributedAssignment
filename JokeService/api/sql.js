@@ -1,7 +1,9 @@
+require('dotenv').config();
 const mysql = require('mysql')
+const isInContainer = process.env.IS_IN_CONTAINER;
 
 const pool = mysql.createPool({
-    host: "localhost",
+    host: isInContainer ? "db" : "localhost",
     user: "pilchh",
     password: "password",
     database: 'joke_service'
