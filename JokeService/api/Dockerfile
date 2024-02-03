@@ -1,7 +1,7 @@
 FROM node:alpine
 
-WORKDIR /usr/jokes
-COPY ./ /usr/jokes
+WORKDIR /usr/services/jokes
+COPY .. /usr/services/jokes
 
 RUN npm install
 

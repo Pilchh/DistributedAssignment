@@ -2,6 +2,8 @@ const express = require("express");
 const JokesController = require("../controllers/jokes.controller");
 const router = express.Router();
 
-router.get("/temp", JokesController.temp);
+router.get("/types", JokesController.getTypes);
+
+router.get('/jokes', JokesController.getJokes);
 
 module.exports = router;

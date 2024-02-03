@@ -5,7 +5,9 @@ const JokeRouter = require("./routes/jokes.routers");
 const PORT = 3001;
 const app = express();
 
-app.use("/jokes", JokeRouter);
+app.use(express.static("public"));
+
+app.use("/", JokeRouter);
 
 app.get("*", (_, res) => {
   res.sendStatus(404);

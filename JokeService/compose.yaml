@@ -1,18 +1,10 @@
 services:
-  analytics:
-    image: analytics:kong_test
-    build:
-      context: ./AnalyticsService
-    pull_policy: always
-    container_name: analytics
-    ports:
-      - 4000:3000
   jokes:
-    image: jokes:kong_test
+    image: jokes-api
     build:
-      context: ./JokeService
+      context: ./api
     pull_policy: always
-    container_name: jokes
+    container_name: jokes-api
     ports:
       - 4001:3001
   db:

@@ -2,13 +2,13 @@
 _format_version: "3.0"
 
 services:
-  - name: analytics
-    # url: http://host.docker.internal:3000 # Not container, running locally
-    url: http://host.docker.internal:4000
-    routes:
-      - name: analytics
-        paths:
-          - /analytics/
+#  - name: analytics
+#    # url: http://host.docker.internal:3000 # Not container, running locally
+#    url: http://host.docker.internal:4000
+#    routes:
+#      - name: analytics
+#        paths:
+#          - /analytics/
   - name: jokes
     # url: http://host.docker.internal:3001 # Not container, running locally
     url: http://host.docker.internal:4001
