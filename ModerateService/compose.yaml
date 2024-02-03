@@ -1,0 +1,25 @@
+services:
+  moderate:
+    image: moderate-api
+    build:
+      context: ./api
+    pull_policy: always
+    container_name: moderate-api
+    restart: unless-stopped
+    ports:
+      - 4100:3100
+  rmq-admin:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 4101:5672
+      - 4102:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq:/var/log/rabbitmq
+volumes:
+  rabbitmq:
+
+networks:
+  rabbitmq:
+    driver: bridge
