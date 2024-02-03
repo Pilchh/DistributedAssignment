@@ -1,6 +1,6 @@
 services:
   moderate:
-    image: moderate-api
+    image: pilchh/moderate-api
     build:
       context: ./api
     pull_policy: always
