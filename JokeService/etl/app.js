@@ -66,11 +66,11 @@ const getType = (type) => {
   });
 };
 
-const assertType = (type) => {
+const assertType = (typeName) => {
   return new Promise((resolve, reject) => {
     sql.query(
-      "INSERT IGNORE INTO types (type) VALUES (?)",
-      [type],
+      `INSERT INTO types (type) SELECT ? WHERE NOT EXISTS (SELECT type FROM types WHERE type = ? )`,
+      [typeName, typeName],
       (err, result) => {
         if (err) reject(err);
         resolve(result);
