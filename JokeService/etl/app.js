@@ -45,9 +45,7 @@ const addJoke = (joke, punchline, type) => {
     assertType(type).then(() => {
       getType(type)
         .then((id) => {
-          sql.query("INSERT INTO jokes (joke, punchline, type) VALUES (?)", [
-            [joke, punchline, id],
-          ]);
+          sql.query(INSERT_JOKE, [[joke, punchline, id]]);
         })
         .catch((err) => console.log(err));
     });
@@ -58,7 +56,7 @@ const addJoke = (joke, punchline, type) => {
 
 const getType = (type) => {
   return new Promise((resolve, reject) => {
-    sql.query("SELECT * FROM types WHERE type = ?", [type], (err, result) => {
+    sql.query(GET_TYPE_FROM_TYPE_TEXT, [type], (err, result) => {
       if (err) reject(err);
       if (result.length > 0) resolve(result[0].type_id);
       else reject("Type not found");
@@ -69,7 +67,7 @@ const getType = (type) => {
 const assertType = (typeName) => {
   return new Promise((resolve, reject) => {
     sql.query(
-      `INSERT INTO types (type) SELECT ? WHERE NOT EXISTS (SELECT type FROM types WHERE type = ? )`,
+      INSERT_TYPE_IF_NOT_EXISTS,
       [typeName, typeName],
       (err, result) => {
         if (err) reject(err);
@@ -83,3 +81,8 @@ rmq_connect().then(() => {
   console.log(`Channel ${queue} created...`);
   rmq_consumer();
 });
+
+const INSERT_TYPE_IF_NOT_EXISTS =
+  "INSERT INTO types (type) SELECT ? WHERE NOT EXISTS (SELECT type FROM types WHERE type = ? )";
+const GET_TYPE_FROM_TYPE_TEXT = "SELECT * FROM types WHERE type = ?";
+const INSERT_JOKE = "INSERT INTO jokes (joke, punchline, type) VALUES (?)";
