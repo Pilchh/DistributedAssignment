@@ -23,7 +23,7 @@ const rmq_connect = async () => {
 
     await rmq_channel.assertQueue(queue, { durable: true });
   } catch (err) {
-    console.log("Error:", err);
+    console.log("RabbitMQ Error - Is the service up?");
   }
 };
 
@@ -33,7 +33,7 @@ const rmq_consumer = () => {
     (message) => {
       let content = message.content.toString();
       let json = JSON.parse(content);
-      console.log(`Message Received: ${content}`);
+      //console.log(`Message Received: ${content}`);
       addJoke(json.joke, json.punchline, json.type);
     },
     { noAck: true },
@@ -42,21 +42,41 @@ const rmq_consumer = () => {
 
 const addJoke = (joke, punchline, type) => {
   try {
-    sql.query("SELECT * FROM types WHERE type = ?", [type], (err, result) => {
-      if (result.length === 0) {
-        sql.query("INSERT INTO types (type) VALUES (?)", [type]);
-      }
+    assertType(type).then(() => {
+      getType(type)
+        .then((id) => {
+          sql.query("INSERT INTO jokes (joke, punchline, type) VALUES (?)", [
+            [joke, punchline, id],
+          ]);
+        })
+        .catch((err) => console.log(err));
     });
-    sql.query(
-      "INSERT INTO jokes (joke, punchline, type) VALUES (?)",
-      [[joke, punchline, type]],
-      () => {
-        console.log("record added");
-      },
-    );
   } catch (err) {
     console.log(err);
   }
+};
+
+const getType = (type) => {
+  return new Promise((resolve, reject) => {
+    sql.query("SELECT * FROM types WHERE type = ?", [type], (err, result) => {
+      if (err) reject(err);
+      if (result.length > 0) resolve(result[0].type_id);
+      else reject("Type not found");
+    });
+  });
+};
+
+const assertType = (type) => {
+  return new Promise((resolve, reject) => {
+    sql.query(
+      "INSERT IGNORE INTO types (type) VALUES (?)",
+      [type],
+      (err, result) => {
+        if (err) reject(err);
+        resolve(result);
+      },
+    );
+  });
 };
 
 rmq_connect().then(() => {

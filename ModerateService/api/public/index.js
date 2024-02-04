@@ -10,7 +10,7 @@ const submitJoke = async () => {
     type: typeElement.value,
   };
 
-  await fetch("/mod/add", {
+  await fetch("add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

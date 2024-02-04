@@ -5,10 +5,11 @@ const updateTypes = async () => {
     result.json().then((result) => {
       typeDropdown.innerHTML = "";
       result.forEach((type) => {
-        let newType = new Option(type.type, type.type);
+        let newType = new Option(type.type, type.type_id);
         typeDropdown.appendChild(newType);
       });
     });
+    ``;
   });
 };
 
