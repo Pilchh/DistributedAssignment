@@ -1,46 +1,22 @@
+const submitJoke = async () => {
+  const jokeElement = document.getElementById("joke");
+  const punchlineElement = document.getElementById("punchline");
+  const typeElement = document.getElementById("type");
+  const pElement = document.getElementById("status");
 
-const updateTypes = async () => {
-  const typeDropdown = document.getElementById('jokeType');
+  let data = {
+    joke: jokeElement.value,
+    punchline: punchlineElement.value,
+    type: typeElement.value,
+  };
 
-  await fetch("/types").then((result) => {
-    result.json().then((result) => {
-      typeDropdown.innerHTML = "";
-      result.forEach((type) => {
-        let newType = new Option(type.type, type.type)
-        typeDropdown.appendChild(newType)
-      })
-    })
-  });
-};
-
-const getJoke = async () => {
-  const typeDropdown = document.getElementById('jokeType');
-  const countInput = document.getElementById('jokeCount');
-  const jokesContainer = document.getElementById("jokes");
-
-  await fetch("/jokes?" + new URLSearchParams({
-    type: typeDropdown.value,
-    count: countInput.value
-  })).then((result) => {
-    result.json().then((jokes) => {
-      jokesContainer.innerText = "";
-      jokes.forEach((joke) => {
-        let jokePTag = document.createElement("p");
-        let jokeContent = document.createTextNode(joke.joke);
-        jokePTag.appendChild(jokeContent);
-
-        let punchlinePTag = document.createElement("p");
-        let punchlineContent = document.createTextNode(joke.punchline);
-        punchlinePTag.appendChild(punchlineContent);
-
-        jokesContainer.appendChild(jokePTag);
-        jokesContainer.appendChild(punchlinePTag);
-      })
-    });
+  await fetch("/mod/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   })
-
-}
-
-window.onload = function() {
-  updateTypes();
-}
+    .then(() => (pElement.innerText = "Joke added!"))
+    .catch((err) => console.log(err));
+};

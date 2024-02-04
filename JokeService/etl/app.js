@@ -2,6 +2,7 @@ require("dotenv").config();
 const amqp = require("amqplib");
 
 let queue = process.env.QUEUE;
+const sql = require("./sql").pool;
 
 let rmq_connection;
 let rmq_channel;
@@ -33,9 +34,29 @@ const rmq_consumer = () => {
       let content = message.content.toString();
       let json = JSON.parse(content);
       console.log(`Message Received: ${content}`);
+      addJoke(json.joke, json.punchline, json.type);
     },
     { noAck: true },
   );
+};
+
+const addJoke = (joke, punchline, type) => {
+  try {
+    sql.query("SELECT * FROM types WHERE type = ?", [type], (err, result) => {
+      if (result.length === 0) {
+        sql.query("INSERT INTO types (type) VALUES (?)", [type]);
+      }
+    });
+    sql.query(
+      "INSERT INTO jokes (joke, punchline, type) VALUES (?)",
+      [[joke, punchline, type]],
+      () => {
+        console.log("record added");
+      },
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 rmq_connect().then(() => {

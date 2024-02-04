@@ -8,6 +8,8 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 
+app.use(express.static("public"));
+
 app.use("/", ModerateRouter);
 
 app.get("*", (_, res) => {

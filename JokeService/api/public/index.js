@@ -1,27 +1,29 @@
-
 const updateTypes = async () => {
-  const typeDropdown = document.getElementById('jokeType');
+  const typeDropdown = document.getElementById("jokeType");
 
-  await fetch("/types").then((result) => {
+  await fetch("types").then((result) => {
     result.json().then((result) => {
       typeDropdown.innerHTML = "";
       result.forEach((type) => {
-        let newType = new Option(type.type, type.type)
-        typeDropdown.appendChild(newType)
-      })
-    })
+        let newType = new Option(type.type, type.type);
+        typeDropdown.appendChild(newType);
+      });
+    });
   });
 };
 
 const getJoke = async () => {
-  const typeDropdown = document.getElementById('jokeType');
-  const countInput = document.getElementById('jokeCount');
+  const typeDropdown = document.getElementById("jokeType");
+  const countInput = document.getElementById("jokeCount");
   const jokesContainer = document.getElementById("jokes");
 
-  await fetch("/jokes?" + new URLSearchParams({
-    type: typeDropdown.value,
-    count: countInput.value
-  })).then((result) => {
+  await fetch(
+    "jokes?" +
+      new URLSearchParams({
+        type: typeDropdown.value,
+        count: countInput.value,
+      }),
+  ).then((result) => {
     result.json().then((jokes) => {
       jokesContainer.innerText = "";
       jokes.forEach((joke) => {
@@ -35,12 +37,11 @@ const getJoke = async () => {
 
         jokesContainer.appendChild(jokePTag);
         jokesContainer.appendChild(punchlinePTag);
-      })
+      });
     });
-  })
+  });
+};
 
-}
-
-window.onload = function() {
+window.onload = function () {
   updateTypes();
-}
+};
