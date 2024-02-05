@@ -9,7 +9,6 @@ console.log("Jokes ETL Service");
 
 rmq.connect(moderatedPort, moderatedQueue).then((channel) => {
   rmq.consumer(channel, moderatedQueue).then((message) => {
-    console.log("here", message);
     addJoke(message.joke, message.punchline, message.type);
   });
 });
