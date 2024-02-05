@@ -1,11 +1,16 @@
-const express = require("express");
+require("dotenv").config();
 
 const SubmitRouter = require("./routes/submit.routers");
+const express = require("express");
 
-const PORT = 3003;
 const app = express();
+const PORT = process.env.PORT;
 
-app.use("/submit", SubmitRouter);
+app.use(express.json());
+
+app.use(express.static("public"));
+
+app.use("/", SubmitRouter);
 
 app.get("*", (_, res) => {
   res.sendStatus(404);
