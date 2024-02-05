@@ -2,6 +2,6 @@ const express = require("express");
 const SubmitController = require("../controllers/submit.controller");
 const router = express.Router();
 
-router.get("/submit", SubmitController.submitJoke);
+router.post("/submit", SubmitController.submitJoke);
 
 module.exports = router;

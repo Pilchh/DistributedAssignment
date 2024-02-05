@@ -1,44 +1,18 @@
 require("dotenv").config();
-const amqp = require("amqplib");
+const rmq = require("./rmq");
 
-let queue = process.env.QUEUE;
+let moderatedQueue = process.env.MODERATED_QUEUE;
+const moderatedPort = process.env.MODERATED_PORT;
 const sql = require("./sql").pool;
 
-let rmq_connection;
-let rmq_channel;
+console.log("Jokes ETL Service");
 
-const rmq_connect = async () => {
-  try {
-    rmq_connection = await amqp.connect(
-      process.env.IS_IN_CONTAINER
-        ? "amqp://guest:guest@host.docker.internal:4101"
-        : "amqp://guest:guest@localhost:4101",
-    );
-    rmq_channel = await rmq_connection.createChannel();
-
-    process.once("SIGINT", async () => {
-      await rmq_channel.close();
-      await rmq_connection.close();
-    });
-
-    await rmq_channel.assertQueue(queue, { durable: true });
-  } catch (err) {
-    console.log("RabbitMQ Error - Is the service up?");
-  }
-};
-
-const rmq_consumer = () => {
-  rmq_channel.consume(
-    queue,
-    (message) => {
-      let content = message.content.toString();
-      let json = JSON.parse(content);
-      //console.log(`Message Received: ${content}`);
-      addJoke(json.joke, json.punchline, json.type);
-    },
-    { noAck: true },
-  );
-};
+rmq.connect(moderatedPort, moderatedQueue).then((channel) => {
+  rmq.consumer(channel, moderatedQueue).then((message) => {
+    console.log("here", message);
+    addJoke(message.joke, message.punchline, message.type);
+  });
+});
 
 const addJoke = (joke, punchline, type) => {
   try {
@@ -76,11 +50,6 @@ const assertType = (typeName) => {
     );
   });
 };
-
-rmq_connect().then(() => {
-  console.log(`Channel ${queue} created...`);
-  rmq_consumer();
-});
 
 const INSERT_TYPE_IF_NOT_EXISTS =
   "INSERT INTO types (type) SELECT ? WHERE NOT EXISTS (SELECT type FROM types WHERE type = ? )";

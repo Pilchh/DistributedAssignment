@@ -10,13 +10,13 @@ services:
       - 4200:3200
   rmq-admin:
     image: rabbitmq:3-management
-    container_name: rabbitmq
+    container_name: rabbitmq-submit
     ports:
       - 4201:5672
       - 4202:15672
     volumes:
-      - rabbitmq:/var/lib/rabbitmq/
-      - rabbitmq:/var/log/rabbitmq
+      - rabbitmq-submit:/var/lib/rabbitmq/
+      - rabbitmq-submit:/var/log/rabbitmq
 volumes:
   rabbitmq-submit:
 

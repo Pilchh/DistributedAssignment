@@ -6,6 +6,8 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT;
 
+console.log("Submit Service");
+
 app.use(express.json());
 
 app.use(express.static("public"));

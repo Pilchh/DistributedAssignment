@@ -10,16 +10,16 @@ services:
       - 4100:3100
   rmq-admin:
     image: rabbitmq:3-management
-    container_name: rabbitmq
+    container_name: rabbitmq-moderate
     ports:
       - 4101:5672
       - 4102:15672
     volumes:
-      - rabbitmq:/var/lib/rabbitmq/
-      - rabbitmq:/var/log/rabbitmq
+      - rabbitmq-moderate:/var/lib/rabbitmq/
+      - rabbitmq-moderate:/var/log/rabbitmq
 volumes:
-  rabbitmq:
+  rabbitmq-moderate:
 
 networks:
-  rabbitmq:
+  rabbitmq-moderate:
     driver: bridge
