@@ -14,7 +14,7 @@ rmq
       moderatedQueue,
       (message) => {
         let content = message.content.toString();
-        console.log(`Message Received: ${content}`);
+        //console.log(`Message Received: ${content}`);
         let json = JSON.parse(content);
         addJoke(json.joke, json.punchline, json.type);
       },
