@@ -10,11 +10,18 @@ console.log("Jokes ETL Service");
 rmq
   .connect(moderatedPort, moderatedQueue)
   .then((channel) => {
-    rmq.consumer(channel, moderatedQueue).then((message) => {
-      addJoke(message.joke, message.punchline, message.type);
-    });
+    channel.consume(
+      moderatedQueue,
+      (message) => {
+        let content = message.content.toString();
+        console.log(`Message Received: ${content}`);
+        let json = JSON.parse(content);
+        addJoke(json.joke, json.punchline, json.type);
+      },
+      { noAck: true },
+    );
   })
-  .catch((err) => {
+  .catch(() => {
     console.log("Failed to connect to RMQ. Restarting...");
     process.exit(1);
   });

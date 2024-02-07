@@ -14,11 +14,16 @@ console.log("Moderate Service");
 rmq
   .connect(submitPort, submitQueue)
   .then((channel) => {
-    rmq.consumer(channel, submitQueue).then((data) => {
-      // Update front end
-    });
+    channel.consume(
+      submitQueue,
+      (message) => {
+        let content = message.content.toString();
+        console.log(`Message Received: ${content}`);
+      },
+      { noAck: true },
+    );
   })
-  .catch((err) => {
+  .catch(() => {
     console.log("Failed to connect to RMQ. Restarting...");
     process.exit(1);
   });
