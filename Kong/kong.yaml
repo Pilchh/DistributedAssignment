@@ -20,6 +20,18 @@ services:
       - name: moderateRmq
         paths:
           - /mod_rmq/
+  - name: submit
+    url: http://host.docker.internal:4200
+    routes:
+      - name: submit
+        paths:
+          - /submit/
+  - name: submitRmq
+    url: http://host.docker.internal:4202
+    routes:
+      - name: submitRmq
+        paths:
+          - /submit_rmq/
 #plugins:
 #  - name: rate-limiting
 #    service: yin

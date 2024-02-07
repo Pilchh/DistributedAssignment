@@ -5,9 +5,15 @@ const submitPort = process.env.SUBMITTED_PORT;
 
 let rmq_channel;
 
-rmq.connect(submitPort, submitQueue).then((channel) => {
-  rmq_channel = channel;
-});
+rmq
+  .connect(submitPort, submitQueue)
+  .then((channel) => {
+    rmq_channel = channel;
+  })
+  .catch((err) => {
+    console.log("Failed to connect to RMQ. Restarting...");
+    process.exit(1);
+  });
 
 const submitJoke = (joke, punchline, type) => {
   return new Promise((resolve, reject) => {

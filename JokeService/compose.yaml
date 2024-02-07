@@ -12,6 +12,7 @@ services:
     build:
       context: ./etl
     pull_policy: always
+    restart: unless-stopped
     container_name: jokes-etl
     ports:
       - 4001:3001

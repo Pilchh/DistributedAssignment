@@ -11,11 +11,17 @@ const submitPort = process.env.SUBMIT_PORT;
 
 console.log("Moderate Service");
 
-rmq.connect(submitPort, submitQueue).then((channel) => {
-  rmq.consumer(channel, submitQueue).then((data) => {
-    // Update front end
+rmq
+  .connect(submitPort, submitQueue)
+  .then((channel) => {
+    rmq.consumer(channel, submitQueue).then((data) => {
+      // Update front end
+    });
+  })
+  .catch((err) => {
+    console.log("Failed to connect to RMQ. Restarting...");
+    process.exit(1);
   });
-});
 
 app.use(express.json());
 

@@ -7,11 +7,17 @@ const sql = require("./sql").pool;
 
 console.log("Jokes ETL Service");
 
-rmq.connect(moderatedPort, moderatedQueue).then((channel) => {
-  rmq.consumer(channel, moderatedQueue).then((message) => {
-    addJoke(message.joke, message.punchline, message.type);
+rmq
+  .connect(moderatedPort, moderatedQueue)
+  .then((channel) => {
+    rmq.consumer(channel, moderatedQueue).then((message) => {
+      addJoke(message.joke, message.punchline, message.type);
+    });
+  })
+  .catch((err) => {
+    console.log("Failed to connect to RMQ. Restarting...");
+    process.exit(1);
   });
-});
 
 const addJoke = (joke, punchline, type) => {
   try {
