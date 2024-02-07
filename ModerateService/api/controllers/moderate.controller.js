@@ -10,4 +10,11 @@ const addJoke = (req, res) => {
     .then(() => res.send("Joke added!"));
 };
 
-module.exports = { addJoke };
+const getNextJoke = (req, res) => {
+  moderateModel.getNextJoke().then((data) => {
+    console.log(data);
+    res.send(data);
+  });
+};
+
+module.exports = { addJoke, getNextJoke };
