@@ -36,7 +36,6 @@ const getNextJoke = () => {
     sub_channel
       .get(submitQueue, { noAck: true })
       .then((message) => {
-        //console.log(message);
         if (typeof message.content === "undefined") {
           resolve(false);
         } else {

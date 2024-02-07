@@ -12,7 +12,6 @@ const addJoke = (req, res) => {
 
 const getNextJoke = (req, res) => {
   moderateModel.getNextJoke().then((data) => {
-    console.log(data);
     res.send(data);
   });
 };
