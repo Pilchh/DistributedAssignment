@@ -4,9 +4,9 @@ const isInContainer = process.env.IS_IN_CONTAINER;
 
 const pool = mysql.createPool({
   host: isInContainer === "true" ? "db" : "localhost",
-  user: "pilchh",
-  password: "password",
-  database: "joke_service",
+  user: "root",
+  password: "pass",
+  database: "jokes_service",
 });
 
 module.exports = { pool };

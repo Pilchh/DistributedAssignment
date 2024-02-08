@@ -20,7 +20,7 @@ const connect = async (port, queue) => {
       console.log(`RMQ Connected on port: ${port}`);
       resolve(rmq_channel);
     } catch (err) {
-      reject("RabbitMQ Error - Is the service up?");
+      reject(err);
     }
   });
 };

@@ -1,8 +1,5 @@
 # IDE settings
 .idea
 
-# Environment Variables
-.env
-
 # node_modules
 node_modules

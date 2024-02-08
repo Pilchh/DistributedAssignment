@@ -20,6 +20,9 @@ app.get("*", (_, res) => {
 });
 
 app.listen(PORT, () => {
-  utils.backupTypes();
+  // try {
+  //   utils.backupTypes();
+  // } catch (err) {}
+
   console.log(`Listening on port: ${PORT}`);
 });

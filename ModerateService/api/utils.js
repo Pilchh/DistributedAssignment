@@ -8,17 +8,22 @@ const backupTypes = () => {
     ? "/var/lib/moderate/types.json"
     : "./types.json";
 
-  fetch(url).then((data) => {
-    data.json().then((json) => {
-      fs.writeFile(saveLocation, JSON.stringify(json), function (err) {
-        if (err) {
-          return console.log("Error", err);
-        } else {
-          console.log("Backup of types created");
-        }
+  try {
+    fetch(url).then((data) => {
+      data.json().then((json) => {
+        fs.writeFile(saveLocation, JSON.stringify(json), function (err) {
+          if (err) {
+            return console.log("Error", err);
+          } else {
+            console.log("Backup of types created");
+          }
+        });
       });
     });
-  });
+  } catch (err) {
+    console.log("Jokes Database is down, using stored types...")
+  }
+
 };
 
 module.exports = { backupTypes };

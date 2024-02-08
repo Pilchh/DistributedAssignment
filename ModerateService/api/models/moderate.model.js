@@ -32,7 +32,7 @@ const addJoke = (joke, punchline, type) => {
         punchline: punchline,
         type: type,
       });
-      utils.backupTypes();
+      //utils.backupTypes();
       resolve("Joke Added");
     } catch (err) {
       reject(err);
