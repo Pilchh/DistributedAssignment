@@ -16,4 +16,10 @@ const getNextJoke = (req, res) => {
   });
 };
 
-module.exports = { addJoke, getNextJoke };
+const getSavedTypes = (req, res) => {
+  moderateModel.getSavedTypes().then((data) => {
+    res.send(data);
+  });
+};
+
+module.exports = { addJoke, getNextJoke, getSavedTypes };

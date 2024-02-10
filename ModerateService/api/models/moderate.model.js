@@ -1,5 +1,6 @@
 const rmq = require("../rmq");
 const utils = require("../utils");
+const { readBackupTypes } = require("../utils");
 require("dotenv").config();
 
 const moderateIp = process.env.MODERATE_IP;
@@ -34,7 +35,7 @@ const addJoke = (joke, punchline, type) => {
         punchline: punchline,
         type: type,
       });
-      //utils.backupTypes();
+      utils.backupTypes();
       resolve("Joke Added");
     } catch (err) {
       reject(err);
@@ -57,4 +58,12 @@ const getNextJoke = () => {
   });
 };
 
-module.exports = { addJoke, getNextJoke };
+const getSavedTypes = () => {
+  return new Promise((resolve, reject) => {
+    readBackupTypes()
+      .then((data) => resolve(data))
+      .catch((err) => reject(err));
+  });
+};
+
+module.exports = { addJoke, getNextJoke, getSavedTypes };
