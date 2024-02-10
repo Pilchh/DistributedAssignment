@@ -3,31 +3,31 @@ _format_version: "3.0"
 
 services:
   - name: jokes
-    url: http://host.docker.internal:4000
+    url: http://10.0.0.4:4000
     routes:
       - name: jokes
         paths:
           - /joke/
   - name: moderate
-    url: http://host.docker.internal:4100
+    url: http://10.0.0.5:4100
     routes:
       - name: moderate
         paths:
           - /mod/
   - name: moderateRmq
-    url: http://host.docker.internal:4102
+    url: http://10.0.0.5:4102
     routes:
       - name: moderateRmq
         paths:
           - /mod_rmq/
   - name: submit
-    url: http://host.docker.internal:4200
+    url: http://10.0.0.6:4200
     routes:
       - name: submit
         paths:
           - /submit/
   - name: submitRmq
-    url: http://host.docker.internal:4202
+    url: http://10.0.0.6:4202
     routes:
       - name: submitRmq
         paths:

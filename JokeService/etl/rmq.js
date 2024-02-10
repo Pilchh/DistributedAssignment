@@ -8,7 +8,7 @@ const connect = async (port, queue) => {
     try {
       let rmq_connection = await amqp.connect(
         process.env.IS_IN_CONTAINER
-          ? `amqp://guest:guest@host.docker.internal:${port}`
+          ? `amqp://guest:guest@${process.env.MODERATED_IP}:${port}`
           : `amqp://guest:guest@localhost:${port}`,
       );
       rmq_channel = await rmq_connection.createChannel();

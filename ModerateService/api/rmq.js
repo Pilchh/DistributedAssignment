@@ -1,12 +1,12 @@
 require("dotenv").config();
 const amqp = require("amqplib");
 
-const connect = async (port, queue) => {
+const connect = async (ip, port, queue) => {
   return new Promise(async (resolve, reject) => {
     try {
       let rmq_connection = await amqp.connect(
         process.env.IS_IN_CONTAINER
-          ? `amqp://guest:guest@host.docker.internal:${port}`
+          ? `amqp://guest:guest@${ip}:${port}`
           : `amqp://guest:guest@localhost:${port}`,
       );
       let rmq_channel = await rmq_connection.createChannel();

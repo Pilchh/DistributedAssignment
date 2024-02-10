@@ -5,6 +5,8 @@ services:
       context: ./api
     pull_policy: always
     container_name: jokes-api
+    depends_on:
+      - db
     ports:
       - 4000:3000
   etl:
@@ -14,22 +16,24 @@ services:
     pull_policy: always
     restart: unless-stopped
     container_name: jokes-etl
+    depends_on:
+      - db
     ports:
       - 4001:3001
   db:
-    image: mysql
+    image: mysql:8.3
+    restart: no
     cap_add:
       - SYS_NICE
-    restart: unless-stopped
     environment:
       - MYSQL_DATABASE=jokes_service
       - MYSQL_ROOT_PASSWORD=pass
       - MYSQL_USER=pilchh
       - MYSQL_PASS=password
-      - MYSQL_ROOT_HOST=%
     ports:
       - '4002:3306'
     volumes:
       - db:/var/lib/mysql
 volumes:
   db:
+    driver: local

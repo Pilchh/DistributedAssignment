@@ -2,6 +2,8 @@ const rmq = require("../rmq");
 const utils = require("../utils");
 require("dotenv").config();
 
+const moderateIp = process.env.MODERATE_IP;
+const submitIp = process.env.SUBMIT_IP;
 const moderatePort = process.env.MODERATE_PORT;
 const moderateQueue = process.env.MODERATE_QUEUE;
 const submitPort = process.env.SUBMIT_PORT;
@@ -11,14 +13,14 @@ let mod_channel;
 let sub_channel;
 
 rmq
-  .connect(moderatePort, moderateQueue)
+  .connect(moderateIp, moderatePort, moderateQueue)
   .then((channel) => {
     mod_channel = channel;
   })
   .catch((err) => console.log("Moderate RMQ service is down"));
 
 rmq
-  .connect(submitPort, submitQueue)
+  .connect(submitIp, submitPort, submitQueue)
   .then((channel) => {
     sub_channel = channel;
   })
