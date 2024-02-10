@@ -1,3 +1,31 @@
+const updateTypes = async () => {
+  const typeDropdown = document.getElementById("jokeType");
+  await fetch("types")
+    .then((result) => {
+      result.json().then((result) => {
+        typeDropdown.innerHTML = "";
+        result.forEach((type) => {
+          let newType = new Option(type.type, type.type_id);
+          typeDropdown.appendChild(newType);
+        });
+      });
+    })
+    .catch((err) => console.log(err));
+  try {
+    await fetch("http://localhost:3000/types").then((result) => {
+      result.json().then((result) => {
+        typeDropdown.innerHTML = "";
+        result.forEach((type) => {
+          let newType = new Option(type.type, type.type_id);
+          typeDropdown.appendChild(newType);
+        });
+      });
+    });
+  } catch (err) {
+    console.log("Jokes API is down... using saved types");
+  }
+};
+
 const submitJoke = async () => {
   const jokeElement = document.getElementById("joke");
   const punchlineElement = document.getElementById("punchline");

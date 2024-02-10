@@ -10,4 +10,10 @@ const submitJoke = (req, res) => {
     .then(() => res.send("Joke submitted!"));
 };
 
-module.exports = { submitJoke };
+const getSavedTypes = (req, res) => {
+  submitModel.getSavedTypes().then((data) => {
+    res.send(data);
+  });
+};
+
+module.exports = { submitJoke, getSavedTypes };

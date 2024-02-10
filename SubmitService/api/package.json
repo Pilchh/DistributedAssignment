@@ -4,7 +4,7 @@
   "description": "Submit service for Jokes API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon --ignore types.json app.js"
   },
   "author": "Pilchh (alex@thepilchers.com)",
   "license": "ISC",
