@@ -18,14 +18,20 @@ rmq
   .then((channel) => {
     mod_channel = channel;
   })
-  .catch((err) => console.log("Moderate RMQ service is down"));
+  .catch((err) => {
+    console.log("Moderate RMQ service is down");
+    process.exit(1);
+  });
 
 rmq
   .connect(submitIp, submitPort, submitQueue)
   .then((channel) => {
     sub_channel = channel;
   })
-  .catch((err) => console.log("Submit RMQ service is down"));
+  .catch((err) => {
+    console.log("Submit RMQ service is down");
+    process.exit(1);
+  });
 
 const addJoke = (joke, punchline, type) => {
   return new Promise((resolve, reject) => {

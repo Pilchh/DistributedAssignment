@@ -1,5 +1,5 @@
 const rmq = require("../rmq");
-const { readBackupTypes, backupTypes } = require("../utils");
+const utils = require("../utils");
 require("dotenv").config();
 const submitQueue = process.env.SUBMITTED_QUEUE;
 const submitPort = process.env.SUBMITTED_PORT;
@@ -24,7 +24,7 @@ const submitJoke = (joke, punchline, type) => {
         punchline: punchline,
         type: type,
       });
-      backupTypes();
+      utils.backupTypes();
       resolve("Joke Submitted");
     } catch (err) {
       reject(err);
@@ -34,7 +34,8 @@ const submitJoke = (joke, punchline, type) => {
 
 const getSavedTypes = () => {
   return new Promise((resolve, reject) => {
-    readBackupTypes()
+    utils
+      .readBackupTypes()
       .then((data) => resolve(data))
       .catch((err) => reject(err));
   });

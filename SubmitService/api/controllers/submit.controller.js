@@ -11,9 +11,12 @@ const submitJoke = (req, res) => {
 };
 
 const getSavedTypes = (req, res) => {
-  submitModel.getSavedTypes().then((data) => {
-    res.send(data);
-  });
+  submitModel
+    .getSavedTypes()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => console.log(err));
 };
 
 module.exports = { submitJoke, getSavedTypes };

@@ -14,14 +14,16 @@ const updateTypes = async () => {
     })
     .catch((err) => console.log(err));
   try {
-    await fetch("http://localhost:3000/types").then((result) => {
-      result.json().then((result) => {
-        typeDropdown.innerHTML = "";
-        result.forEach((type) => {
-          let newType = new Option(type.type, type.type_id);
-          typeDropdown.appendChild(newType);
+    await fetch("http://20.77.67.244/joke/types/").then((result) => {
+      if (result.status === 200 || result.status === 304) {
+        result.json().then((result) => {
+          typeDropdown.innerHTML = "";
+          result.forEach((type) => {
+            let newType = new Option(type.type, type.type_id);
+            typeDropdown.appendChild(newType);
+          });
         });
-      });
+      }
     });
   } catch (err) {
     console.log("Jokes API is down... using saved types");

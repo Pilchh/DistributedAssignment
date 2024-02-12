@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const SubmitRouter = require("./routes/submit.routers");
 const express = require("express");
-const { backupTypes } = require("./utils");
+const utils = require("./utils");
 
 const app = express();
 const PORT = process.env.PORT;
@@ -20,6 +20,7 @@ app.get("*", (_, res) => {
 });
 
 app.listen(PORT, () => {
-  backupTypes();
+  utils.backupTypes();
+
   console.log(`Listening on port: ${PORT}`);
 });
