@@ -32,8 +32,3 @@ services:
       - name: submitRmq
         paths:
           - /submit_rmq/
-#plugins:
-#  - name: rate-limiting
-#    service: yin
-#    config:
-#      minute: 10
