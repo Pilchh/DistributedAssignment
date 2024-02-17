@@ -114,8 +114,11 @@ const deleteJoke = () => {
 
   jokeElement.value = "";
   punchlineElement.value = "";
-  typeElement.value = "";
   pElement.innerText = "Joke deleted.";
+
+  if (typeElement !== null) {
+    typeElement.value = "";
+  }
 
   const jokeStatus = document.getElementById("jokeStatus");
 

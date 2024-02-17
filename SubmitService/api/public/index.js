@@ -12,7 +12,7 @@ const updateTypes = async () => {
     })
     .catch((err) => console.log(err));
   try {
-    await fetch("http://20.77.67.244/joke/types/").then((result) => {
+    await fetch("https://20.77.67.244/joke/types/").then((result) => {
       if (result.status === 200 || result.status === 304) {
         result.json().then((result) => {
           typeDropdown.innerHTML = "";
