@@ -1,0 +1,78 @@
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.centre-container {
+    margin-top: 3rem;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    margin-inline: auto;
+    padding: 0 3rem 3rem 3rem;
+    border: 1px solid #cecece;
+    border-radius: 10px;
+    height: fit-content;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.centre-container > h1 {
+    text-align: center;
+}
+
+.row-input {
+    display: flex;
+    flex-direction: row;
+}
+
+.row-input > select {
+    margin-left: 1rem;
+}
+
+.centre-container > button {
+    margin-inline: auto;
+    margin-top: 2rem;
+    width: 100px;
+    padding: 0.5rem;
+    background: #0d6efd;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    transition: ease-in-out 100ms;
+}
+
+.centre-container > button:hover {
+    cursor: pointer;
+    background: #0b5ed7;
+    transition: ease-in-out 100ms;
+}
+
+.joke-container {
+    margin-top: 3rem;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    margin-inline: auto;
+    padding: 2rem 2rem 2rem 2rem;
+    border: 1px solid #cecece;
+    border-radius: 10px;
+    height: fit-content;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+#jokes > p{
+    margin: 0;
+    text-align: center;
+}
+
+#jokes > p + p {
+    margin-top: 1rem;
+}

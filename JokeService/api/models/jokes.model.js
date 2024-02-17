@@ -11,6 +11,12 @@ const getTypes = () => {
 
 const getJokes = (jokeType) => {
   return new Promise((resolve, reject) => {
+    if (jokeType === "-1") {
+      sql.query(`SELECT * FROM jokes;`, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    }
     sql.query(
       `SELECT * FROM jokes WHERE type = '${jokeType}';`,
       (err, result) => {
