@@ -13,17 +13,19 @@ const backupTypes = () => {
   try {
     fetch(url)
       .then((data) => {
-        data.json().then((json) => {
-          fs.writeFile(saveLocation, JSON.stringify(json), function (err) {
-            if (err) {
-              return console.log("Error", err);
-            } else {
-              console.log("Backup of types created");
-            }
+        if (data.status === 200 || data.status === 304) {
+          data.json().then((json) => {
+            fs.writeFile(saveLocation, JSON.stringify(json), function (err) {
+              if (err) {
+                return console.log("Error", err);
+              } else {
+                console.log("Backup of types created");
+              }
+            });
           });
-        });
+        }
       })
-      .catch((err) => console.log(err));
+      .catch(() => "Jokes Database is down, using stored types...");
   } catch (err) {
     console.log("Jokes Database is down, using stored types...");
   }
@@ -42,6 +44,7 @@ const readBackupTypes = () => {
           console.log(err);
           return;
         }
+        console.log(data);
         resolve(data);
       });
     } catch (err) {

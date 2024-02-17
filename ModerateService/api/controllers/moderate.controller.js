@@ -17,9 +17,12 @@ const getNextJoke = (req, res) => {
 };
 
 const getSavedTypes = (req, res) => {
-  moderateModel.getSavedTypes().then((data) => {
-    res.send(data);
-  });
+  moderateModel
+    .getSavedTypes()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => console.log(err));
 };
 
 module.exports = { addJoke, getNextJoke, getSavedTypes };
