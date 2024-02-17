@@ -5,7 +5,7 @@ const updateTypes = async () => {
       result.json().then((result) => {
         typeDropdown.innerHTML = "";
         result.forEach((type) => {
-          let newType = new Option(type.type, type.type_id);
+          let newType = new Option(type.type, type.type);
           typeDropdown.appendChild(newType);
         });
       });
@@ -17,7 +17,7 @@ const updateTypes = async () => {
         result.json().then((result) => {
           typeDropdown.innerHTML = "";
           result.forEach((type) => {
-            let newType = new Option(type.type, type.type_id);
+            let newType = new Option(type.type, type.type);
             typeDropdown.appendChild(newType);
           });
         });
@@ -31,13 +31,13 @@ const updateTypes = async () => {
 const submitJoke = async () => {
   const jokeElement = document.getElementById("joke");
   const punchlineElement = document.getElementById("punchline");
-  const typeElement = document.getElementById("type");
+  const typeDropdown = document.getElementById("jokeType");
   const pElement = document.getElementById("status");
 
   let data = {
     joke: jokeElement.value,
     punchline: punchlineElement.value,
-    type: typeElement.value,
+    type: typeDropdown.value,
   };
 
   await fetch("submit", {
@@ -47,6 +47,10 @@ const submitJoke = async () => {
     },
     body: JSON.stringify(data),
   })
-    .then(() => (pElement.innerText = "Joke submitted!"))
+    .then(() => {
+      pElement.innerText = "Joke submitted!";
+      jokeElement.value = "";
+      punchlineElement.value = "";
+    })
     .catch((err) => console.log(err));
 };
