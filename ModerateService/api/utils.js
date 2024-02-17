@@ -44,7 +44,6 @@ const readBackupTypes = () => {
           console.log(err);
           return;
         }
-        console.log(data);
         resolve(data);
       });
     } catch (err) {
