@@ -54,3 +54,7 @@ const submitJoke = async () => {
     })
     .catch((err) => console.log(err));
 };
+
+window.onload = function () {
+  updateTypes();
+};
