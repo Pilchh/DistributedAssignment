@@ -40,7 +40,7 @@ const submitJoke = async () => {
     type: typeDropdown.value,
   };
 
-  await fetch("submit", {
+  await fetch("sub", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

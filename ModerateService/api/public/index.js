@@ -74,7 +74,7 @@ const submitJoke = async () => {
 };
 
 const getNext = () => {
-  fetch("next").then((data) =>
+  fetch("mod").then((data) =>
     data.json().then((joke) => {
       if (joke) {
         isPaused = true;
