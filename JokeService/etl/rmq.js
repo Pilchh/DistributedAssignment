@@ -11,13 +11,19 @@ const connect = async (port, queue) => {
       );
       let rmq_channel = await rmq_connection.createChannel();
 
-      process.once("SIGINT", async () => {
-        await rmq_channel.close();
-        await rmq_connection.close();
-      });
-
       await rmq_channel.assertQueue(queue, { durable: true });
       console.log(`RMQ Connected on port: ${port}`);
+
+      rmq_connection.on("error", () => {
+        console.log("RMQ disconnected, trying again in 5 seconds...");
+        setTimeout(() => connect(port, queue), 5000);
+      });
+
+      rmq_connection.on("close", () => {
+        console.log("RMQ disconnected, trying again in 5 seconds...");
+        setTimeout(() => connect(port, queue), 5000);
+      });
+
       resolve(rmq_channel);
     } catch (err) {
       reject(err);

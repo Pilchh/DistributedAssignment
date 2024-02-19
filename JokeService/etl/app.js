@@ -7,31 +7,26 @@ const sql = require("./sql").pool;
 
 console.log("Jokes ETL Service");
 
-setTimeout(() => {
+const connectRmq = () => {
   rmq
     .connect(moderatedPort, moderatedQueue)
     .then((channel) => {
-      channel
-        .consume(
-          moderatedQueue,
-          (message) => {
-            let content = message.content.toString();
-            //console.log(`Message Received: ${content}`);
-            let json = JSON.parse(content);
-            addJoke(json.joke, json.punchline, json.type);
-          },
-          { noAck: true },
-        )
-        .catch(() => {
-          console.log("Disconnected from RMQ. Restarting...");
-          process.exit(1);
-        });
+      channel.consume(
+        moderatedQueue,
+        (message) => {
+          let content = message.content.toString();
+          console.log(`Message Received: ${content}`);
+          let json = JSON.parse(content);
+          addJoke(json.joke, json.punchline, json.type);
+        },
+        { noAck: true },
+      );
     })
-    .catch(() => {
-      console.log("Failed to connect to RMQ. Restarting...");
-      process.exit(1);
+    .catch((err) => {
+      console.log("RMQ not connected, trying again in 5 seconds...");
+      setTimeout(connectRmq, 5000);
     });
-}, 7500);
+};
 
 const addJoke = (joke, punchline, type) => {
   try {
@@ -69,6 +64,8 @@ const assertType = (typeName) => {
     );
   });
 };
+
+setTimeout(connectRmq, 5000);
 
 const INSERT_TYPE_IF_NOT_EXISTS =
   "INSERT INTO types (type) SELECT ? WHERE NOT EXISTS (SELECT type FROM types WHERE type = ? )";
