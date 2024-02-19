@@ -11,7 +11,7 @@ services:
   - name: moderate
     url: http://10.0.0.5:4100
     routes:
-      - name: moderate
+      - name: moderateRoute
         paths:
           - /mod/
   - name: moderateRmq
@@ -32,3 +32,16 @@ services:
       - name: submitRmq
         paths:
           - /submit_rmq/
+consumers:
+  - username: user
+
+basicauth_credentials:
+  - consumer: user
+    username: test
+    password: test
+
+plugins:
+  - name: basic-auth
+    route: moderateRoute
+    config:
+      hide_credentials: true
