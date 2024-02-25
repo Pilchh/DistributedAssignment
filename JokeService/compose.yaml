@@ -21,15 +21,11 @@ services:
     ports:
       - 4001:3001
   db:
-    image: mysql:8.3
+    image: mysql
     restart: no
-    cap_add:
-      - SYS_NICE
     environment:
       - MYSQL_DATABASE=jokes_service
       - MYSQL_ROOT_PASSWORD=pass
-      - MYSQL_USER=pilchh
-      - MYSQL_PASS=password
     ports:
       - '4002:3306'
     volumes:

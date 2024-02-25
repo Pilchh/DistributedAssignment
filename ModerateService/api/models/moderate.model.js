@@ -12,25 +12,29 @@ const submitQueue = process.env.SUBMIT_QUEUE;
 let mod_channel;
 let sub_channel;
 
-rmq
-  .connect(moderateIp, moderatePort, moderateQueue)
-  .then((channel) => {
-    mod_channel = channel;
-  })
-  .catch((err) => {
-    console.log("Moderate RMQ service is down");
-    process.exit(1);
-  });
+const connectModerate = () => {
+  rmq
+    .connect(moderateIp, moderatePort, moderateQueue)
+    .then((channel) => {
+      mod_channel = channel;
+    })
+    .catch((err) => {
+      console.log("Moderate RMQ not connected, trying again in 5 seconds...");
+      setTimeout(connectModerate, 5000);
+    });
+};
 
-rmq
-  .connect(submitIp, submitPort, submitQueue)
-  .then((channel) => {
-    sub_channel = channel;
-  })
-  .catch((err) => {
-    console.log("Submit RMQ service is down");
-    process.exit(1);
-  });
+const connectSubmit = () => {
+  rmq
+    .connect(submitIp, submitPort, submitQueue)
+    .then((channel) => {
+      sub_channel = channel;
+    })
+    .catch((err) => {
+      console.log("Submit RMQ not connected, trying again in 5 seconds...");
+      setTimeout(connectSubmit, 5000);
+    });
+};
 
 const addJoke = (joke, punchline, type) => {
   return new Promise((resolve, reject) => {
@@ -50,16 +54,23 @@ const addJoke = (joke, punchline, type) => {
 
 const getNextJoke = () => {
   return new Promise(async (resolve, reject) => {
-    sub_channel
-      .get(submitQueue, { noAck: true })
-      .then((message) => {
-        if (typeof message.content === "undefined") {
-          resolve(false);
-        } else {
-          resolve(message.content.toString());
-        }
-      })
-      .catch((err) => reject(err));
+    if (sub_channel) {
+      sub_channel
+        .get(submitQueue, { noAck: true })
+        .then((message) => {
+          if (
+            typeof message.content === "undefined" ||
+            message.status === 502
+          ) {
+            resolve(false);
+          } else {
+            resolve(message.content.toString());
+          }
+        })
+        .catch((err) => reject(err));
+    } else {
+      resolve(false);
+    }
   });
 };
 
@@ -71,5 +82,8 @@ const getSavedTypes = () => {
       .catch((err) => reject(err));
   });
 };
+
+connectModerate();
+connectSubmit();
 
 module.exports = { addJoke, getNextJoke, getSavedTypes };

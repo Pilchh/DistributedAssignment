@@ -6,15 +6,17 @@ const submitPort = process.env.SUBMITTED_PORT;
 
 let rmq_channel;
 
-rmq
-  .connect(submitPort, submitQueue)
-  .then((channel) => {
-    rmq_channel = channel;
-  })
-  .catch((err) => {
-    console.log("Failed to connect to RMQ. Restarting...");
-    process.exit(1);
-  });
+const connectSubmit = () => {
+  rmq
+    .connect(submitPort, submitQueue)
+    .then((channel) => {
+      rmq_channel = channel;
+    })
+    .catch((err) => {
+      console.log("Submit RMQ not connected, trying again in 5 seconds...");
+      setTimeout(connectSubmit, 5000);
+    });
+};
 
 const submitJoke = (joke, punchline, type) => {
   return new Promise((resolve, reject) => {
@@ -40,5 +42,5 @@ const getSavedTypes = () => {
       .catch((err) => reject(err));
   });
 };
-
+connectSubmit();
 module.exports = { submitJoke, getSavedTypes };
