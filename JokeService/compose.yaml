@@ -5,6 +5,12 @@ services:
       context: ./api
     pull_policy: always
     container_name: jokes-api
+    environment:
+      - IS_IN_CONTAINER=${IS_IN_CONTAINER}
+      - PORT=${JOKES_PORT}
+      - MODERATED_IP=${MODERATED_IP}
+      - MODERATED_PORT=${MODERATED_PORT}
+      - MODERATED_QUEUE=${MODERATED_QUEUE}
     depends_on:
       - db
     ports:
@@ -16,6 +22,12 @@ services:
     pull_policy: always
     restart: unless-stopped
     container_name: jokes-etl
+    environment:
+      - IS_IN_CONTAINER=${IS_IN_CONTAINER}
+      - PORT=${ETL_PORT}
+      - MODERATED_IP=${MODERATED_IP}
+      - MODERATED_PORT=${MODERATED_PORT}
+      - MODERATED_QUEUE=${MODERATED_QUEUE}
     depends_on:
       - db
     ports:
@@ -25,7 +37,7 @@ services:
     restart: no
     environment:
       - MYSQL_DATABASE=jokes_service
-      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - '4002:3306'
     volumes:

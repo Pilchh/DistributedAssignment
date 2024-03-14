@@ -1,9 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
 const JokeRouter = require("./routes/jokes.routers");
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 app.use(cors());
