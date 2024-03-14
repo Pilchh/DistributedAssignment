@@ -5,6 +5,12 @@ services:
       context: ./api
     pull_policy: always
     container_name: submit-api
+    environment:
+      - IS_IN_CONTAINER=${IS_IN_CONTAINER}
+      - PORT=${SUBMIT_API_PORT}
+      - SUBMIT_IP=${SUBMIT_IP}
+      - SUBMIT_PORT=${SUBMIT_PORT}
+      - SUBMIT_QUEUE=${SUBMIT_QUEUE}
     restart: unless-stopped
     ports:
       - 4200:3200

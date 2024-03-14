@@ -1,17 +1,13 @@
 require("dotenv").config();
 const amqp = require("amqplib");
 
-let rmq_channel;
-
-const connect = async (port, queue) => {
+const connect = async (ip, port, queue) => {
   return new Promise(async (resolve, reject) => {
     try {
       let rmq_connection = await amqp.connect(
-        process.env.IS_IN_CONTAINER
-          ? `amqp://guest:guest@${process.env.SUBMITTED_IP}:${port}`
-          : `amqp://guest:guest@localhost:${port}`,
+        `amqp://guest:guest@${ip}:${port}`,
       );
-      rmq_channel = await rmq_connection.createChannel();
+      let rmq_channel = await rmq_connection.createChannel();
 
       process.once("SIGINT", async () => {
         await rmq_channel.close();
@@ -22,7 +18,7 @@ const connect = async (port, queue) => {
       console.log(`RMQ Connected on port: ${port}`);
       resolve(rmq_channel);
     } catch (err) {
-      reject("RabbitMQ Error - Is the service up?");
+      reject(err);
     }
   });
 };
@@ -50,8 +46,4 @@ const addToQueue = (channel, queue, data) => {
   channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
 };
 
-module.exports = {
-  connect,
-  consumer,
-  addToQueue,
-};
+module.exports = { connect, consumer, addToQueue };

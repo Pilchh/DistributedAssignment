@@ -1,14 +1,15 @@
 const rmq = require("../rmq");
 const utils = require("../utils");
 require("dotenv").config();
-const submitQueue = process.env.SUBMITTED_QUEUE;
-const submitPort = process.env.SUBMITTED_PORT;
+const submitIp = process.env.SUBMIT_IP;
+const submitQueue = process.env.SUBMIT_QUEUE;
+const submitPort = process.env.SUBMIT_PORT;
 
 let rmq_channel;
 
 const connectSubmit = () => {
   rmq
-    .connect(submitPort, submitQueue)
+    .connect(submitIp, submitPort, submitQueue)
     .then((channel) => {
       rmq_channel = channel;
     })
