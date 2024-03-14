@@ -5,6 +5,15 @@ services:
       context: ./api
     pull_policy: always
     container_name: moderate-api
+    environment:
+      - IS_IN_CONTAINER=${IS_IN_CONTAINER}
+      - PORT=${MOD_PORT}
+      - MODERATED_IP=${MODERATED_IP}
+      - SUBMIT_IP=${SUBMIT_IP}
+      - MODERATED_PORT=${MODERATED_PORT}
+      - SUBMIT_PORT=${SUBMIT_PORT}
+      - MODERATE_QUEUE=${MODERATE_QUEUE}
+      - SUBMIT_QUEUE=${SUBMIT_QUEUE}
     restart: unless-stopped
     ports:
       - 4100:3100

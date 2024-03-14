@@ -2,9 +2,9 @@ const rmq = require("../rmq");
 const utils = require("../utils");
 require("dotenv").config();
 
-const moderateIp = process.env.MODERATE_IP;
+const moderateIp = process.env.MODERATED_IP;
 const submitIp = process.env.SUBMIT_IP;
-const moderatePort = process.env.MODERATE_PORT;
+const moderatePort = process.env.MODERATED_PORT;
 const moderateQueue = process.env.MODERATE_QUEUE;
 const submitPort = process.env.SUBMIT_PORT;
 const submitQueue = process.env.SUBMIT_QUEUE;
