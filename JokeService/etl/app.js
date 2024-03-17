@@ -1,12 +1,14 @@
 require("dotenv").config();
 const rmq = require("./rmq");
+const sql = require("./sql").pool;
 
+// Load environment variables
 let moderatedQueue = process.env.MODERATED_QUEUE;
 const moderatedPort = process.env.MODERATED_PORT;
-const sql = require("./sql").pool;
 
 console.log("Jokes ETL Service");
 
+// Connect to moderated RMQ instance
 const connectRmq = () => {
   rmq
     .connect(moderatedPort, moderatedQueue)
@@ -24,10 +26,15 @@ const connectRmq = () => {
     })
     .catch((err) => {
       console.log("RMQ not connected, trying again in 5 seconds...");
+
+      // Recall connect function on error with 5 second timeout
       setTimeout(connectRmq, 5000);
     });
 };
 
+/*
+ * Function adds new joke to database
+ */
 const addJoke = (joke, punchline, type) => {
   try {
     assertType(type).then(() => {
@@ -42,6 +49,9 @@ const addJoke = (joke, punchline, type) => {
   }
 };
 
+/*
+ * Function gets type ID from type string passed in
+ */
 const getType = (type) => {
   return new Promise((resolve, reject) => {
     sql.query(GET_TYPE_FROM_TYPE_TEXT, [type], (err, result) => {
@@ -52,6 +62,10 @@ const getType = (type) => {
   });
 };
 
+/*
+ * Add new type to the database if it doesn't
+ * exist
+ */
 const assertType = (typeName) => {
   return new Promise((resolve, reject) => {
     sql.query(

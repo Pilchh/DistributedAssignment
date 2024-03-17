@@ -4,16 +4,20 @@ const amqp = require("amqplib");
 const connect = async (port, queue) => {
   return new Promise(async (resolve, reject) => {
     try {
+      // Create connection with either container or
+      // localhost depending on IS_IN_CONTAINER
       let rmq_connection = await amqp.connect(
         process.env.IS_IN_CONTAINER
           ? `amqp://guest:guest@${process.env.MODERATED_IP}:${port}`
           : `amqp://guest:guest@localhost:${port}`,
       );
+
       let rmq_channel = await rmq_connection.createChannel();
 
       await rmq_channel.assertQueue(queue, { durable: true });
       console.log(`RMQ Connected on port: ${port}`);
 
+      // On error attempt to reconnect in 5 seconds
       rmq_connection.on("error", () => {
         console.log("RMQ disconnected, trying again in 5 seconds...");
         setTimeout(() => connect(port, queue), 5000);

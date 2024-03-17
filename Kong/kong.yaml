@@ -1,4 +1,3 @@
-# http://host.docker.internal:3000 # Not container, running locally
 _format_version: "3.0"
 
 services:
