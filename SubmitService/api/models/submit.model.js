@@ -1,12 +1,15 @@
 const rmq = require("../rmq");
 const utils = require("../utils");
 require("dotenv").config();
+
+// Get environment variables
 const submitIp = process.env.SUBMIT_IP;
 const submitQueue = process.env.SUBMIT_QUEUE;
 const submitPort = process.env.SUBMIT_PORT;
 
 let rmq_channel;
 
+// Connect to submit RMQ
 const connectSubmit = () => {
   rmq
     .connect(submitIp, submitPort, submitQueue)
@@ -22,11 +25,13 @@ const connectSubmit = () => {
 const submitJoke = (joke, punchline, type) => {
   return new Promise((resolve, reject) => {
     try {
+      // Add joke to queue
       rmq.addToQueue(rmq_channel, submitQueue, {
         joke: joke,
         punchline: punchline,
         type: type,
       });
+      // Update the types from joke database
       utils.backupTypes();
       resolve("Joke Submitted");
     } catch (err) {
@@ -35,6 +40,7 @@ const submitJoke = (joke, punchline, type) => {
   });
 };
 
+// Return the saved types found in the types.json file
 const getSavedTypes = () => {
   return new Promise((resolve, reject) => {
     utils
@@ -43,5 +49,8 @@ const getSavedTypes = () => {
       .catch((err) => reject(err));
   });
 };
+
+// Initial RMQ function calls
 connectSubmit();
+
 module.exports = { submitJoke, getSavedTypes };

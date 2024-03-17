@@ -6,6 +6,7 @@ const utils = require("./utils");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
+// Swagger options
 const options = {
   definition: {
     openapi: "3.1.0",
@@ -32,20 +33,24 @@ const PORT = process.env.PORT;
 
 console.log("Submit Service");
 
+// Set up middleware
 app.use(express.json());
-
 app.use(express.static("public"));
 
+// Add routes
 app.use("/", SubmitRouter);
 
+// Serve swagger
 const specs = swaggerJsdoc(options);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
+// Blanket 404 rule for undefined routes
 app.get("*", (_, res) => {
   res.sendStatus(404);
 });
 
 app.listen(PORT, () => {
+  // Backup joke types on boot
   utils.backupTypes();
 
   console.log(`Listening on port: ${PORT}`);

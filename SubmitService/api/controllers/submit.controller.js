@@ -1,6 +1,7 @@
 const submitModel = require("../models/submit.model");
 
 const submitJoke = (req, res) => {
+  // Get body parameters
   let joke = req.body.joke;
   let punchline = req.body.punchline;
   let type = req.body.type;
