@@ -1,6 +1,7 @@
 const moderateModel = require("../models/moderate.model");
 
 const addJoke = (req, res) => {
+  // Get body parameters
   let joke = req.body.joke;
   let punchline = req.body.punchline;
   let type = req.body.type;

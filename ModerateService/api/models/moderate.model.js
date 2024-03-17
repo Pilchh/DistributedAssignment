@@ -2,6 +2,7 @@ const rmq = require("../rmq");
 const utils = require("../utils");
 require("dotenv").config();
 
+// Get environment variables
 const moderateIp = process.env.MODERATED_IP;
 const submitIp = process.env.SUBMIT_IP;
 const moderatePort = process.env.MODERATED_PORT;
@@ -12,6 +13,7 @@ const submitQueue = process.env.SUBMIT_QUEUE;
 let mod_channel;
 let sub_channel;
 
+// Connect to moderate RMQ
 const connectModerate = () => {
   rmq
     .connect(moderateIp, moderatePort, moderateQueue)
@@ -19,11 +21,13 @@ const connectModerate = () => {
       mod_channel = channel;
     })
     .catch((err) => {
+      // Restart after 5 seconds on error
       console.log("Moderate RMQ not connected, trying again in 5 seconds...");
       setTimeout(connectModerate, 5000);
     });
 };
 
+// Connect to submit RMQ
 const connectSubmit = () => {
   rmq
     .connect(submitIp, submitPort, submitQueue)
@@ -31,6 +35,7 @@ const connectSubmit = () => {
       sub_channel = channel;
     })
     .catch((err) => {
+      // Restart after 5 seconds on error
       console.log("Submit RMQ not connected, trying again in 5 seconds...");
       setTimeout(connectSubmit, 5000);
     });
@@ -39,11 +44,13 @@ const connectSubmit = () => {
 const addJoke = (joke, punchline, type) => {
   return new Promise((resolve, reject) => {
     try {
+      // Add joke to moderate RMQ
       rmq.addToQueue(mod_channel, moderateQueue, {
         joke: joke,
         punchline: punchline,
         type: type,
       });
+      // Update the types from joke database
       utils.backupTypes();
       resolve("Joke Added");
     } catch (err) {
@@ -55,6 +62,7 @@ const addJoke = (joke, punchline, type) => {
 const getNextJoke = () => {
   return new Promise(async (resolve, reject) => {
     if (sub_channel) {
+      // Get first joke in queue
       sub_channel
         .get(submitQueue, { noAck: true })
         .then((message) => {
@@ -62,8 +70,10 @@ const getNextJoke = () => {
             typeof message.content === "undefined" ||
             message.status === 502
           ) {
+            // Return false if there is no joke
             resolve(false);
           } else {
+            // Send data if joke found
             resolve(message.content.toString());
           }
         })
@@ -74,6 +84,7 @@ const getNextJoke = () => {
   });
 };
 
+// Return the saved types found in the types.json file
 const getSavedTypes = () => {
   return new Promise((resolve, reject) => {
     utils
@@ -83,6 +94,7 @@ const getSavedTypes = () => {
   });
 };
 
+// Initial RMQ function calls
 connectModerate();
 connectSubmit();
 
